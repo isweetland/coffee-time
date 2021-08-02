@@ -1,7 +1,8 @@
-import { Variants as AddMenuButtonVariants } from '../../components/AddMenuButton'
 import { ConstrainedComponentStyleConfig } from '../types'
 
-const AddMenuButton: ConstrainedComponentStyleConfig<AddMenuButtonVariants> = {
+export type MenuButtonVariants = 'mobile' | 'browser'
+
+const MenuButton: ConstrainedComponentStyleConfig<MenuButtonVariants> = {
     baseStyle: {
         borderRadius: 100,
         bg: 'brand.100',
@@ -23,4 +24,4 @@ const AddMenuButton: ConstrainedComponentStyleConfig<AddMenuButtonVariants> = {
     },
 }
 
-export default AddMenuButton
+export default MenuButton

@@ -13,27 +13,18 @@ import {
 import React from 'react'
 import { MenuButtonVariants } from '../theme/components/MenuButton'
 
-const AddMenuButton = ({ variant }: { variant?: MenuButtonVariants }) => {
+const AvatarMenuButton = ({ variant }: { variant?: MenuButtonVariants }) => {
     const styles = useStyleConfig('MenuButton', { variant })
     return (
         <Menu>
             {({ isOpen }) => (
                 <>
-                    <MenuButton
-                        as={IconButton}
-                        aria-label={isOpen ? 'Close Create Menu' : 'Open Create Menu'}
-                        icon={
-                            <AddIcon
-                                color="black"
-                                transform={`rotate(${isOpen ? '45' : '0'}deg)`}
-                                transition="transform 0.3s ease-in"
-                            />
-                        }
-                        sx={{ ...styles }}
-                    />
+                    <MenuButton aria-label={isOpen ? 'Close Avatar Menu' : 'Open Avatar Menu'} sx={{ ...styles }}>
+                        <Center color="black">U</Center>
+                    </MenuButton>
                     <MenuList bg="brand.300" borderColor="brand.100" borderRadius={50}>
-                        <CustomMenuItem label="New Brew" />
-                        <CustomMenuItem label="New Method" />
+                        <CustomMenuItem label="Account" />
+                        <CustomMenuItem label="Logout" />
                     </MenuList>
                 </>
             )}
@@ -57,4 +48,4 @@ const CustomMenuItem: ComponentWithAs<'button', MenuItemProps & { label?: string
     </MenuItem>
 )
 
-export default AddMenuButton
+export default AvatarMenuButton

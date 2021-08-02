@@ -1,14 +1,16 @@
 import { Grid } from '@chakra-ui/layout'
+import { Box, useColorModeValue } from '@chakra-ui/react'
 import React from 'react'
 import Nav from '../../nav/mobile/Nav'
 import Home from '../../pages/Home'
 
 const Layout = () => {
+    const bg = useColorModeValue('light.200', 'dark.200')
     return (
-        <Grid templateRows="1fr auto" templateColumns="1fr" h="100%" w="100%" position="fixed">
+        <Box h="100vh" w="100%" bg={bg}>
             <Home />
             <Nav />
-        </Grid>
+        </Box>
     )
 }
 

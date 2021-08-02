@@ -1,11 +1,12 @@
-import { Flex, Heading } from '@chakra-ui/layout'
-import { Button } from '@chakra-ui/react'
+import { Flex } from '@chakra-ui/layout'
+import { Button, useColorModeValue } from '@chakra-ui/react'
 import React from 'react'
 
 const Nav = () => {
+    const bg = useColorModeValue('light.100', 'dark.100')
     return (
         <Flex
-            bg="dark.100"
+            bg={bg}
             direction="row"
             justify="space-evenly"
             align="center"
