@@ -1,9 +1,9 @@
 import { ChakraProvider, useMediaQuery } from '@chakra-ui/react'
 import React from 'react'
+import { BrowserRouter as Router } from 'react-router-dom'
 import './App.css'
 import BrowserContext from './context/browser-context'
-import BrowserLayout from './layout/browser/Layout'
-import MobileLayout from './layout/mobile/Layout'
+import Layout from './layout/Layout'
 import theme from './theme/extendedTheme'
 
 function App() {
@@ -12,7 +12,9 @@ function App() {
     return (
         <ChakraProvider theme={theme}>
             <BrowserContext.Provider value={isLargerThan48em}>
-                {isLargerThan48em ? <BrowserLayout /> : <MobileLayout />}
+                <Router>
+                    <Layout />
+                </Router>
             </BrowserContext.Provider>
         </ChakraProvider>
     )

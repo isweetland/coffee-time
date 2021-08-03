@@ -3,6 +3,7 @@ import {
     Center,
     ComponentWithAs,
     IconButton,
+    Link,
     Menu,
     MenuButton,
     MenuItem,
@@ -11,10 +12,17 @@ import {
     useStyleConfig,
 } from '@chakra-ui/react'
 import React from 'react'
+import { useHistory } from 'react-router-dom'
 import { MenuButtonVariants } from '../theme/components/MenuButton'
 
 const AddMenuButton = ({ variant }: { variant?: MenuButtonVariants }) => {
     const styles = useStyleConfig('MenuButton', { variant })
+    const history = useHistory()
+
+    const linkToNewBrew = () => {
+        history.push('/new-brew')
+    }
+
     return (
         <Menu>
             {({ isOpen }) => (
@@ -32,7 +40,7 @@ const AddMenuButton = ({ variant }: { variant?: MenuButtonVariants }) => {
                         sx={{ ...styles }}
                     />
                     <MenuList bg="brand.300" borderColor="brand.100" borderRadius={50}>
-                        <CustomMenuItem label="New Brew" />
+                        <CustomMenuItem label="New Brew" onClick={linkToNewBrew} />
                         <CustomMenuItem label="New Method" />
                     </MenuList>
                 </>
@@ -50,7 +58,7 @@ const CustomMenuItem: ComponentWithAs<'button', MenuItemProps & { label?: string
         {...props}
     >
         {!!label && (
-            <Center w="100%" fontWeight="bold">
+            <Center w="100%" fontWeight="bold" as={Link}>
                 {label}
             </Center>
         )}

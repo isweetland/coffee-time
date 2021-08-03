@@ -1,5 +1,5 @@
-import { ThemeConfig, ThemeExtension, ThemeOverride, extendTheme } from '@chakra-ui/react'
-import MenuButton from './components/MenuButton'
+import { ThemeConfig, ThemeExtension, ThemeOverride, extendTheme } from '@chakra-ui/react';
+import MenuButton from './components/MenuButton';
 
 const themeObject: ThemeOverride | ThemeExtension<ThemeOverride> = {
     colors: {
@@ -50,13 +50,13 @@ const themeObject: ThemeOverride | ThemeExtension<ThemeOverride> = {
     components: {
         MenuButton,
     },
-}
+};
 
 const config: ThemeConfig = {
     initialColorMode: 'light',
     useSystemColorMode: false,
-}
+};
 
-const theme = extendTheme({ ...themeObject, config })
+const theme = extendTheme({ ...themeObject, config });
 
-export default theme
+export default theme;

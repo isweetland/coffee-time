@@ -16,7 +16,7 @@ import { MenuButtonVariants } from '../theme/components/MenuButton'
 const AvatarMenuButton = ({ variant }: { variant?: MenuButtonVariants }) => {
     const styles = useStyleConfig('MenuButton', { variant })
     return (
-        <Menu>
+        <Menu strategy="fixed" boundary="scrollParent">
             {({ isOpen }) => (
                 <>
                     <MenuButton aria-label={isOpen ? 'Close Avatar Menu' : 'Open Avatar Menu'} sx={{ ...styles }}>
