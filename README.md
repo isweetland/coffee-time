@@ -1,6 +1,8 @@
 # Coffee Time
 
-A diary and analyitics app for coffee
+A diary and analyitics app for coffee. 
+
+Very much a WIP.
 
 ## Features to be implemented:
 
