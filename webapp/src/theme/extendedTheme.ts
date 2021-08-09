@@ -1,7 +1,9 @@
 import { ThemeConfig, ThemeExtension, ThemeOverride, extendTheme } from '@chakra-ui/react';
 import MenuButton from './components/MenuButton';
 
-const themeObject: ThemeOverride | ThemeExtension<ThemeOverride> = {
+const themeObjectGenerator: (isBrowser: boolean) => ThemeOverride | ThemeExtension<ThemeOverride> = (
+    isBrowser = true
+) => ({
     colors: {
         brand: {
             100: '#a0583c',
@@ -49,14 +51,50 @@ const themeObject: ThemeOverride | ThemeExtension<ThemeOverride> = {
     },
     components: {
         MenuButton,
+        Button: {
+            baseStyle: {
+                bg: 'brand.100',
+                color: 'black',
+                _hover: { bg: isBrowser ? 'accent' : 'brand.100' },
+                _active: {
+                    transform: isBrowser ? '' : 'scale(105%)',
+                    bg: 'brand.100',
+                },
+            },
+            variants: {
+                base: {},
+            },
+            defaultProps: {
+                variant: 'base',
+            },
+        },
+        Input: {
+            variants: {
+                outline: (props) => ({
+                    field: {
+                        borderColor: props.colorMode === 'light' ? 'brand.200' : 'accent',
+                        _hover: { borderColor: props.colorMode === 'light' ? 'accent' : 'brand.200' },
+                        _focus: {
+                            borderColor: props.colorMode === 'light' ? 'accent' : 'brand.200',
+                            boxShadow:
+                                props.colorMode === 'light'
+                                    ? '0 0 0 1px var(--chakra-colors-accent)'
+                                    : '0 0 0 1px var(--chakra-colors-brand-200)',
+                        },
+                    },
+                }),
+            },
+        },
     },
-};
+});
 
 const config: ThemeConfig = {
     initialColorMode: 'light',
     useSystemColorMode: false,
 };
 
-const theme = extendTheme({ ...themeObject, config });
+function generateTheme({ isBrowser = true }: { isBrowser?: boolean }) {
+    return extendTheme({ ...themeObjectGenerator(isBrowser), config });
+}
 
-export default theme;
+export default generateTheme;

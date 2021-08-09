@@ -1,14 +1,14 @@
-import { SearchIcon } from '@chakra-ui/icons'
-import { Box, Input, InputGroup, InputLeftElement, useColorModeValue } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import { SearchIcon } from '@chakra-ui/icons';
+import { Box, Input, InputGroup, InputLeftElement, useColorModeValue } from '@chakra-ui/react';
+import React, { useState } from 'react';
 
 const SearchBar = () => {
-    const [focused, setFocus] = useState(false)
-    const color = useColorModeValue('lightFont', 'darkFont')
+    const [focused, setFocus] = useState(false);
+    const color = useColorModeValue('lightFont', 'darkFont');
 
     return (
         <Box position="relative">
-            <InputGroup size="lg" borderColor={color}>
+            <InputGroup size="lg">
                 <InputLeftElement
                     pointerEvents="none"
                     children={
@@ -20,15 +20,10 @@ const SearchBar = () => {
                     }
                     zIndex={1}
                 />
-                <Input
-                    focusBorderColor="accent"
-                    onFocus={() => setFocus(true)}
-                    onBlur={() => setFocus(false)}
-                    _hover={{}}
-                />
+                <Input onFocus={() => setFocus(true)} onBlur={() => setFocus(false)} />
             </InputGroup>
         </Box>
-    )
-}
+    );
+};
 
-export default SearchBar
+export default SearchBar;
