@@ -53,5 +53,8 @@
     "tabWidth": 4,
     "semi": true,
     "singleQuote": true
+  },
+  "devDependencies": {
+    "resize-observer-polyfill": "^1.5.1"
   }
 }
