@@ -14,9 +14,6 @@ import {
     SliderThumb,
     NumberInput,
     NumberInputField,
-    NumberInputStepper,
-    NumberIncrementStepper,
-    NumberDecrementStepper,
     Tag,
     TagLabel,
     TagCloseButton,
@@ -25,14 +22,26 @@ import {
     Wrap,
     WrapItem,
     Box,
-    Image,
+    useColorMode,
 } from '@chakra-ui/react';
 import React, { MouseEventHandler, ReactNode, useContext, useEffect, useRef, useState } from 'react';
 import BrowserContext from '../../context/browser-context';
+import ROContext from '../../context/resize-observer';
 import coffeeCompass from '../../static/compass.jpg';
+import useResizeObserver from '../../utils/useResizeObserver';
+import useSize from '../../utils/useSize';
 
 const NewBrew = () => {
-    const borderColor = useColorModeValue('lightFont', 'darkFont');
+    const borderColor = useColorModeValue('brand.200', 'accent');
+    const hoverBorderColor = useColorModeValue('accent', 'brand.200');
+    const focusBorderColor = useColorModeValue('accent', 'brand.200');
+    const boxShadow = useColorModeValue(
+        '0 0 0 1px var(--chakra-colors-accent)',
+        '0 0 0 1px var(--chakra-colors-brand-200)'
+    );
+
+    const ref = useRef<HTMLDivElement>(null);
+    const { subscribe, unsubscribe } = useContext(ROContext);
 
     const [coffee, setCoffee] = useState<number>();
     const [water, setWater] = useState<number>();
@@ -41,21 +50,14 @@ const NewBrew = () => {
     const [tastingNotes, setTastingNotes] = useState<string[]>([]);
     const [tastingNote, setTastingNote] = useState('');
 
-    const ref = useRef<HTMLDivElement>(null);
-    const [width, setWidth] = useState(0);
-
-    const isBrowser = useContext(BrowserContext);
-
-    useEffect(() => {
-        setWidth(ref.current?.clientWidth || 0);
-    }, [ref.current?.clientWidth]);
+    const [width, height] = useSize(ref);
 
     return (
         <Flex justify="center" p={5} w="100%">
             <VStack spacing={5} ref={ref} maxW="100%">
                 <VStack spacing={1} w="100%">
                     <Text alignSelf="flex-start">Bean</Text>
-                    <Input borderColor={borderColor} _hover={{ borderColor }} />
+                    <Input />
                 </VStack>
                 <VStack spacing={1}>
                     <Flex justify="space-between" w="100%">
@@ -63,13 +65,8 @@ const NewBrew = () => {
                         <Text>Water Used</Text>
                     </Flex>
                     <HStack>
-                        <InputGroup borderColor={borderColor}>
-                            <Input
-                                pr="5rem"
-                                type="number"
-                                onChange={({ target }) => setCoffee(+target.value)}
-                                _hover={{ borderColor }}
-                            />
+                        <InputGroup>
+                            <Input pr="5rem" type="number" onChange={({ target }) => setCoffee(+target.value)} />
                             <InputRightElement bg="transparent" w="4.5rem" zIndex={1}>
                                 <Select defaultValue="g" zIndex={1} border="0" _hover={{ cursor: 'pointer' }}>
                                     <option value="grams">g</option>
@@ -77,13 +74,8 @@ const NewBrew = () => {
                                 </Select>
                             </InputRightElement>
                         </InputGroup>
-                        <InputGroup borderColor={borderColor}>
-                            <Input
-                                pr="5rem"
-                                type="number"
-                                onChange={({ target }) => setWater(+target.value)}
-                                _hover={{ borderColor }}
-                            />
+                        <InputGroup>
+                            <Input pr="5rem" type="number" onChange={({ target }) => setWater(+target.value)} />
                             <InputRightElement bg="transparent" w="4.5rem" zIndex={1}>
                                 <Select defaultValue="g" zIndex={1} border="0" _hover={{ cursor: 'pointer' }}>
                                     <option value="grams">g</option>
@@ -109,7 +101,7 @@ const NewBrew = () => {
                             onChange={(val) => setGrindSize(val)}
                         >
                             <SliderTrack>
-                                <SliderFilledTrack bg="accent" />
+                                <SliderFilledTrack bg={borderColor} />
                             </SliderTrack>
                             <SliderThumb />
                         </Slider>
@@ -117,25 +109,31 @@ const NewBrew = () => {
                     </HStack>
                 </VStack>
                 <HStack alignSelf="flex-start">
-                    <Input placeholder="Grinder Used?" borderColor={borderColor} _hover={{ borderColor }} />
-                    <Input placeholder="Grinder Setting?" borderColor={borderColor} _hover={{ borderColor }} />
+                    <Input placeholder="Grinder Used?" />
+                    <Input placeholder="Grinder Setting?" />
                 </HStack>
                 <VStack spacing={1} alignSelf="flex-start">
                     <Text alignSelf="flex-start">Brew Duration (M:S)</Text>
                     <HStack
                         border="1px solid"
                         borderColor={borderColor}
+                        _hover={{ borderColor: hoverBorderColor }}
+                        _focusWithin={{
+                            borderColor: focusBorderColor,
+                            boxShadow: boxShadow,
+                        }}
                         borderRadius="md"
                         transitionDuration="normal"
                         transitionProperty="common"
                         w="10rem"
                     >
-                        <NumberInput min={0} max={59} value={time.minutes} borderColor={borderColor}>
+                        <NumberInput min={0} max={59} value={time.minutes}>
                             <NumberInputField
                                 textAlign="end"
                                 border="0"
                                 paddingInlineEnd={2}
                                 onChange={({ target }) => setTime({ ...time, minutes: +target.value })}
+                                _focus={{}}
                             />
                         </NumberInput>
                         <Text>:</Text>
@@ -145,6 +143,7 @@ const NewBrew = () => {
                                 border="0"
                                 paddingInlineStart={2}
                                 onChange={({ target }) => setTime({ ...time, seconds: +target.value })}
+                                _focus={{}}
                                 onBlur={() => {
                                     const newTime = {
                                         minutes: time.minutes + Math.floor(time.seconds / 60),
@@ -160,11 +159,10 @@ const NewBrew = () => {
                     <Text alignSelf="flex-start">Notes</Text>
                     <Wrap maxW={width} alignSelf="flex-start">
                         {tastingNotes.map((tn, idx) => (
-                            <WrapItem maxW={width}>
+                            <WrapItem maxW={width} key={idx}>
                                 <CustomTag
                                     label={tn}
                                     onRemove={(tag) => setTastingNotes(tastingNotes.filter((tn) => tn !== tag))}
-                                    key={idx}
                                 />
                             </WrapItem>
                         ))}
@@ -172,8 +170,6 @@ const NewBrew = () => {
                     <InputGroup>
                         <Input
                             pr="4.5rem"
-                            borderColor={borderColor}
-                            _hover={{ borderColor }}
                             placeholder="Tasting Note"
                             onKeyPress={(event) => {
                                 if (event.key === 'Enter') {
@@ -191,14 +187,7 @@ const NewBrew = () => {
                         <InputRightElement width="4.5rem">
                             <Button
                                 h="1.75rem"
-                                bg="brand.100"
                                 aria-label="Add Tasting Note"
-                                color="black"
-                                _hover={{ bg: isBrowser ? 'accent' : 'brand.100' }}
-                                _active={{
-                                    transform: isBrowser ? '' : 'scale(105%)',
-                                    bg: 'brand.100',
-                                }}
                                 onClick={() => {
                                     if (
                                         tastingNote &&
@@ -214,7 +203,13 @@ const NewBrew = () => {
                         </InputRightElement>
                     </InputGroup>
                 </VStack>
-                <Compass size={`${width}px`} />
+                <VStack>
+                    <Compass size={`${Math.min(700, width)}px`} />
+                    <HStack>
+                        <Button aria-label="Save Compass Selection">Save</Button>
+                        <Button aria-label="Reset Compass Selection">Reset</Button>
+                    </HStack>
+                </VStack>
             </VStack>
         </Flex>
     );
@@ -266,10 +261,17 @@ const Compass = ({ size }: { size: string }) => {
     }, [canvas.current, size]);
 
     return (
-        <div style={{ width: size, height: size }}>
+        <Box style={{ width: size, height: size }} border="1px solid" borderColor="black">
             <div style={{ width: '100%', height: '100%', position: 'relative' }}>
                 <img
-                    style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+                    style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        userSelect: 'none',
+                    }}
                     src={coffeeCompass}
                 />
                 <canvas
@@ -280,12 +282,11 @@ const Compass = ({ size }: { size: string }) => {
                         position: 'absolute',
                         top: '0px',
                         left: '0px',
-                        backgroundColor: 'rgba(255,0,0,.1)',
                     }}
                     onClick={clickHandler}
                 />
             </div>
-        </div>
+        </Box>
     );
 };
 
