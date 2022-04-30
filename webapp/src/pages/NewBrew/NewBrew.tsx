@@ -26,7 +26,7 @@ import {
 } from '@chakra-ui/react';
 import React, { MouseEventHandler, ReactNode, useContext, useEffect, useRef, useState } from 'react';
 import BrowserContext from '../../context/browser-context';
-import ROContext from '../../context/resize-observer';
+import ResizeObserverContext from '../../context/resize-observer';
 import coffeeCompass from '../../static/compass.jpg';
 import useResizeObserver from '../../utils/useResizeObserver';
 import useSize from '../../utils/useSize';
@@ -41,7 +41,7 @@ const NewBrew = () => {
     );
 
     const ref = useRef<HTMLDivElement>(null);
-    const { subscribe, unsubscribe } = useContext(ROContext);
+    const { subscribe, unsubscribe } = useContext(ResizeObserverContext);
 
     const [coffee, setCoffee] = useState<number>();
     const [water, setWater] = useState<number>();

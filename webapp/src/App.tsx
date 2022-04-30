@@ -3,23 +3,23 @@ import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import './App.css';
 import BrowserContext from './context/browser-context';
-import ROContext from './context/resize-observer';
+import ResizeObserverContext from './context/resize-observer';
 import Layout from './layout/Layout';
 import themeGenerator from './theme/extendedTheme';
 import useResizeObserver from './utils/useResizeObserver';
 
 function App() {
     const [isLargerThan48em] = useMediaQuery('(min-width: 48em)');
-    const ro = useResizeObserver();
+    const resizeObserver = useResizeObserver();
 
     return (
         <ChakraProvider theme={themeGenerator({ isBrowser: isLargerThan48em })}>
             <BrowserContext.Provider value={isLargerThan48em}>
-                <ROContext.Provider value={ro}>
+                <ResizeObserverContext.Provider value={resizeObserver}>
                     <Router>
                         <Layout />
                     </Router>
-                </ROContext.Provider>
+                </ResizeObserverContext.Provider>
             </BrowserContext.Provider>
         </ChakraProvider>
     );

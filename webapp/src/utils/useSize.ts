@@ -1,8 +1,8 @@
 import { RefObject, useContext, useEffect, useLayoutEffect, useState } from 'react';
-import ROContext from '../context/resize-observer';
+import ResizeObserverContext from '../context/resize-observer';
 
 const useSize = (ref: RefObject<HTMLElement>, { initialSize = [0, 0], mode = 'client' }: UseSizeConfig = {}) => {
-    const { subscribe, unsubscribe } = useContext(ROContext);
+    const { subscribe, unsubscribe } = useContext(ResizeObserverContext);
     const [size, setSize] = useState<Size>(initialSize);
 
     useEffect(() => {
